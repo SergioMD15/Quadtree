@@ -19,7 +19,15 @@ class Tree:
 
     def find(self, x, y):
         if(self.quad == None):
-            print('There are no points yet')
+            return None
         else:
             value = self.quad.find_quad(Point(x, y))
-            print('x: %.2f;y: %.2f' % (value.x, value.y))
+            return value
+
+    def delete(self, x, y):
+        point = Point(x,y)
+        if(self.quad == None):
+            return None
+        else:
+            value = self.quad.find_quad(Point(x, y))
+            return value

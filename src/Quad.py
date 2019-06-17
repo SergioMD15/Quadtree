@@ -4,30 +4,47 @@ class Quad:
 
     def __init__(self, point, half_x, half_y):
         self.children = {'NE': None,
-                         'NW': None,
+                         'SE': None,
                          'SW': None,
-                         'SE': None, }
+                         'NW': None }
         self.point = point
         self.half_x = half_x
         self.half_y = half_y
         self.leaf = True
 
     def insert(self, point):
-        if(self.leaf):
+        """
+        Adds a new point to the Quadtree.
+        
+        If it fits in this quad, is inserted at this level,
+        otherwise we go a level down selecting the most accurate
+        cardinality for the given point.
+
+        Parameters
+        ----------
+        point : Point
+            Coordinates (x,y) of the point to be inserted in the tree.
+
+        Returns
+        -------
+        Point
+            Middle point (x,y) of the quad the point belongs to.
+        """
+
+        if(self.is_leaf()):
             self.subdivide()
         key, size = self.get_cardinality(point)
         if(self.children[key]):
-            self.children[key].insert(point)
+            return self.children[key].insert(point)
         else:
             self.children[key] = Quad(point, size.x, size.y)
+            return size
 
     def subdivide(self):
         pos, size = self.get_cardinality(self.point)
         self.children[pos] = Quad(self.point, size.x, size.y)
         self.leaf = False
-
-    def is_empty(self):
-        return len([i for i in self.children.values() if i != None]) == 0
+        self.point = None
 
     def find_quad(self, point):
         if(point == self.point):
@@ -57,5 +74,14 @@ class Quad:
             return Point(self.half_x + self.half_x/2, self.half_y - self.half_y / 2)
         elif (pos == 'NW'):
             return Point(self.half_x - self.half_x/2, self.half_y + self.half_y / 2)
-        else:
+        elif (pos == 'SW'):
             return Point(self.half_x - self.half_x/2, self.half_y - self.half_y / 2)
+        else:
+            return None
+
+    # def delete(self, point):
+    #     cardinality, size = self.get_cardinality(point)
+    #     if(self.children[key] == )
+
+    def is_leaf(self):
+        return self.leaf

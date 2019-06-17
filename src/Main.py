@@ -1,14 +1,33 @@
 from Tree import Tree
 
-tree = Tree(4)
+tree = Tree(10)
 
 tree.insert(1,1)
-tree.insert(2,1)
 
-point = tree.find(1,1)
-if(point):
-    point.print_point()
+print('\n\n After inserting (1,1) \n\n')
 
-point = tree.find(2,1)
-if(point):
-    point.print_point()
+tree.print_points()
+
+tree.insert(4,4)
+
+print('\n\n After inserting (4,4) \n\n')
+
+tree.print_points()
+
+tree.insert(1,9)
+
+print('\n\n After inserting (1,9) \n\n')
+
+tree.print_points()
+
+tree.insert(9,9)
+
+print('\n\n After inserting (9,9) \n\n')
+
+tree.print_points()
+
+tree.insert(8,8)
+
+print('\n\n After inserting (8,8) \n\n')
+
+tree.print_points()

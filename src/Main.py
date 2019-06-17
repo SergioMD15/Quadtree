@@ -16,9 +16,9 @@ print('\n\n\n\n')
 
 ### DELETION ###
 
-# points.reverse()
+points.reverse()
 
-# for p in points:
-#     tree.delete(p[0], p[1])
-#     print('\n\nAfter deleting (%d,%d)\n\n' % (p[0], p[1]))
-#     tree.print_points()
+for p in points:
+    tree.delete(p[0], p[1])
+    print('\n\nAfter deleting (%d,%d)\n\n' % (p[0], p[1]))
+    tree.print_points()

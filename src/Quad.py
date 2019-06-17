@@ -11,6 +11,7 @@ class Quad:
         self.half_x = half_x
         self.half_y = half_y
         self.size = size
+        self.removable = False
         
 
     def insert(self, point):
@@ -69,13 +70,15 @@ class Quad:
     def delete(self, point):
         if(self.point == point):
             self.point = None
+            self.removable = True
             return True
         else:
             pos = self.get_cardinality(point)
             if(pos and self.children[pos]):
                 deleted = self.children[pos].delete(point)
                 if(deleted):
-                    self.children[pos] = None
+                    if (self.children[pos].removable):
+                        self.children[pos] = None 
                     keys = self.get_used_quads()
                     if(len(keys) == 1 and len(self.children[keys[0]].get_used_quads()) == 0):
                         self.point = self.children[keys[0]].point

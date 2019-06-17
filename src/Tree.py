@@ -30,10 +30,11 @@ class Tree:
             return value
 
     def delete(self, x, y):
-        if(not self.quad.delete(Point(x,y))):
+        point = Point(x,y)
+        if(not self.quad.delete(point)):
             print('The point was not found')
         else:
-            self.points.remove(Point(x,y))
+            self.points.remove(point)
             
 
     def print_points(self):

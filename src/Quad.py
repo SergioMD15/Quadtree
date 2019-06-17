@@ -11,42 +11,25 @@ class Quad:
         self.half_x = half_x
         self.half_y = half_y
         self.size = size
-        self.leaf = True
+        
 
     def insert(self, point):
-        """
-        Adds a new point to the Quadtree.
-        
-        If it fits in this quad, is inserted at this level,
-        otherwise we go a level down selecting the most accurate
-        cardinality for the given point.
-
-        Parameters
-        ----------
-        point : Point
-            Coordinates (x,y) of the point to be inserted in the tree.
-
-        Returns
-        -------
-        Point
-            Middle point (x,y) of the quad the point belongs to.
-        """
-
-        if(self.is_leaf()):
+        if(self.point):
             self.subdivide()
         key = self.get_cardinality(point)
         size = self.get_new_halfs(key)
         if(self.children[key]):
-            return self.children[key].insert(point)
+            self.children[key].insert(point)
         else:
             self.children[key] = Quad(point, self.size / 2, size.x, size.y)
-            return size
+
+    def get_used_quads(self):
+        return [i for i in self.children.keys() if self.children[i]]
 
     def subdivide(self):
         pos = self.get_cardinality(self.point)
         size = self.get_new_halfs(pos)
         self.children[pos] = Quad(self.point, self.size / 2, size.x, size.y)
-        self.leaf = False
         self.point = None
 
     def find_quad(self, point):
@@ -84,24 +67,18 @@ class Quad:
             return None
 
     def delete(self, point):
-        pos = self.get_cardinality(point)
-        if(self.children[pos]):
-            if(self.children[pos].is_leaf()):
-                self.children[pos] = None
-                return True
-            else:
-                deletion = self.children[pos].delete(point)
-                keys = [i for i in self.children.keys() if i]
-                if(deletion and len(keys) == 1):
-                    self.point = self.children[keys[0]].point
-                    self.children[keys[0]] = None
-                    self.leaf = True
-                    return deletion
-                else:
-                    return deletion
-
+        if(self.point == point):
+            self.point = None
+            return True
         else:
+            pos = self.get_cardinality(point)
+            if(pos and self.children[pos]):
+                deleted = self.children[pos].delete(point)
+                if(deleted):
+                    self.children[pos] = None
+                    keys = self.get_used_quads()
+                    if(len(keys) == 1 and len(self.children[keys[0]].get_used_quads()) == 0):
+                        self.point = self.children[keys[0]].point
+                        self.children[keys[0]] = None
+                return deleted
             return False
-
-    def is_leaf(self):
-        return self.leaf

@@ -2,56 +2,23 @@ from Tree import Tree
 
 tree = Tree(10)
 
-tree.insert(1,1)
+points = [(1,1), (2,2), (4,4), (9,9), (8,8), (8,9), (9,8)]
 
-print('\n\n After inserting (1,1) \n\n')
+### INSERTION ###
 
-tree.print_points()
+for p in points:
+    tree.insert(p[0], p[1])
+    print('\n\nAfter inserting (%d,%d)\n\n' % (p[0], p[1]))
+    tree.print_points()
 
-tree.insert(2,2)
+print('\n\n\n\n')
 
-print('\n\n After inserting (2,2) \n\n')
 
-tree.print_points()
+### DELETION ###
 
-tree.insert(4,4)
+# points.reverse()
 
-print('\n\n After inserting (4,4) \n\n')
-
-tree.print_points()
-
-tree.insert(9,9)
-
-print('\n\n After inserting (9,9) \n\n')
-
-tree.print_points()
-
-tree.insert(8,8)
-
-print('\n\n After inserting (8,8) \n\n')
-
-tree.print_points()
-
-tree.insert(8,9)
-
-print('\n\n After inserting (8,9) \n\n')
-
-tree.print_points()
-
-tree.insert(9,8)
-
-print('\n\n After inserting (9,8) \n\n')
-
-tree.print_points()
-
-tree.delete(1,1)
-
-print('\n\n After deleting (1,1) \n\n')
-
-tree.print_points()
-
-tree.delete(4,4)
-
-print('\n\n After deleting (4,4) \n\n')
-
-tree.print_points()
+# for p in points:
+#     tree.delete(p[0], p[1])
+#     print('\n\nAfter deleting (%d,%d)\n\n' % (p[0], p[1]))
+#     tree.print_points()

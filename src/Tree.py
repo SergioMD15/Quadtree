@@ -5,21 +5,22 @@ from Point import Point
 class Tree:
     def __init__(self, size):
         self.size = size
-        self.quad = None
+        self.half_x = size / 2
+        self.half_y = self.half_x
         self.points = []
+        self.quad = None
 
     def insert(self, x, y):
         point = Point(x, y)
-        if(x > self.size or y > self.size):
-            print('The point is out of the limits')
+        if((x > self.size or y > self.size) or point in self.points):
+            print('The point is not valid')
+            return
         else:
             if(not self.quad):
-                half = self.size / 2
-                self.quad = Quad(point, half, half)
-                self.points.append(point)
+                self.quad = Quad(point, self.size, self.half_x, self.half_y)
             else:
-                result = self.quad.insert(point)
-                self.points.append(point)
+                self.quad.insert(point)
+            self.points.append(point)
 
     def find(self, x, y):
         if(self.quad == None):
@@ -29,12 +30,12 @@ class Tree:
             return value
 
     def delete(self, x, y):
-        point = Point(x,y)
-        if(self.quad == None):
-            return None
+        if(not self.quad.delete(Point(x,y))):
+            print('The point was not found')
         else:
-            return self.quad.delete(Point(x, y))
+            self.points.remove(Point(x,y))
+            
 
     def print_points(self):
         for p in self.points:
-            print(self.find(p.x, p.y))
+            print('Point: (%d, %d): (%s)' % (p.x, p.y, str(self.find(p.x, p.y))))

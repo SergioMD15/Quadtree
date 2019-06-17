@@ -2,7 +2,7 @@ from Point import Point
 
 class Quad:
 
-    def __init__(self, point, half_x, half_y):
+    def __init__(self, point, size, half_x, half_y):
         self.children = {'NE': None,
                          'SE': None,
                          'SW': None,
@@ -10,6 +10,7 @@ class Quad:
         self.point = point
         self.half_x = half_x
         self.half_y = half_y
+        self.size = size
         self.leaf = True
 
     def insert(self, point):
@@ -33,16 +34,18 @@ class Quad:
 
         if(self.is_leaf()):
             self.subdivide()
-        key, size = self.get_cardinality(point)
+        key = self.get_cardinality(point)
+        size = self.get_new_halfs(key)
         if(self.children[key]):
             return self.children[key].insert(point)
         else:
-            self.children[key] = Quad(point, size.x, size.y)
+            self.children[key] = Quad(point, self.size / 2, size.x, size.y)
             return size
 
     def subdivide(self):
-        pos, size = self.get_cardinality(self.point)
-        self.children[pos] = Quad(self.point, size.x, size.y)
+        pos = self.get_cardinality(self.point)
+        size = self.get_new_halfs(pos)
+        self.children[pos] = Quad(self.point, self.size / 2, size.x, size.y)
         self.leaf = False
         self.point = None
 
@@ -50,7 +53,7 @@ class Quad:
         if(point == self.point):
             return (Point(self.half_x, self.half_y))
         else:
-            pos, halfs = self.get_cardinality(point)
+            pos = self.get_cardinality(point)
             if(self.children[pos]):
                 return self.children[pos].find_quad(point)
             return None
@@ -65,23 +68,40 @@ class Quad:
             pos = 'NW'
         elif(point.x < self.half_x and point.y < self.half_y):
             pos = 'SW'
-        return pos, self.get_new_halfs(pos)
+        return pos
 
     def get_new_halfs(self, pos):
+        inc = self.size / 4
         if (pos == 'NE'):
-            return Point(self.half_x + self.half_x/2, self.half_y + self.half_y / 2)
+            return Point(self.half_x + inc, self.half_y + inc)
         elif (pos == 'SE'):
-            return Point(self.half_x + self.half_x/2, self.half_y - self.half_y / 2)
+            return Point(self.half_x + inc, abs(self.half_y - inc))
         elif (pos == 'NW'):
-            return Point(self.half_x - self.half_x/2, self.half_y + self.half_y / 2)
+            return Point(abs(self.half_x - inc), self.half_y + inc)
         elif (pos == 'SW'):
-            return Point(self.half_x - self.half_x/2, self.half_y - self.half_y / 2)
+            return Point(abs(self.half_x - inc), abs(self.half_y - inc))
         else:
             return None
 
-    # def delete(self, point):
-    #     cardinality, size = self.get_cardinality(point)
-    #     if(self.children[key] == )
+    def delete(self, point):
+        pos = self.get_cardinality(point)
+        if(self.children[pos]):
+            if(self.children[pos].is_leaf()):
+                self.children[pos] = None
+                return True
+            else:
+                deletion = self.children[pos].delete(point)
+                keys = [i for i in self.children.keys() if i]
+                if(deletion and len(keys) == 1):
+                    self.point = self.children[keys[0]].point
+                    self.children[keys[0]] = None
+                    self.leaf = True
+                    return deletion
+                else:
+                    return deletion
+
+        else:
+            return False
 
     def is_leaf(self):
         return self.leaf

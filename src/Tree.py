@@ -40,3 +40,9 @@ class Tree:
     def print_points(self):
         for p in self.points:
             print('Point: (%d, %d): (%s)' % (p.x, p.y, str(self.find(p.x, p.y))))
+
+    def print_points_reversed(self):
+        ps = self.points
+        ps.reverse()
+        for p in ps:
+            print('Point: (%d, %d): (%s)' % (p.x, p.y, str(self.find(p.x, p.y))))

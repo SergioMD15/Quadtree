@@ -1,24 +1,24 @@
 from Tree import Tree
 
-tree = Tree(10)
+size = 100
 
-points = [(1,1), (2,2), (4,4), (9,9), (8,8), (8,9), (9,8)]
+tree = Tree(size)
 
 ### INSERTION ###
 
-for p in points:
-    tree.insert(p[0], p[1])
-    print('\n\nAfter inserting (%d,%d)\n\n' % (p[0], p[1]))
-    tree.print_points()
+for p in range(size):
+    for p2 in range(size):
+        tree.insert(p, p2)
+        tree.print_points()
 
 print('\n\n\n\n')
 
 
 ### DELETION ###
 
-points.reverse()
+for p in range(size - 1, -1, -1):
+    for p2 in range(size - 1, -1, -1):
+        tree.print_points()
+        tree.delete(p, p2)
 
-for p in points:
-    tree.delete(p[0], p[1])
-    print('\n\nAfter deleting (%d,%d)\n\n' % (p[0], p[1]))
-    tree.print_points()
+tree.print_points_reversed()

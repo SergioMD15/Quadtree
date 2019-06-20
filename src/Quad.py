@@ -1,18 +1,18 @@
 from Point import Point
 
+
 class Quad:
 
     def __init__(self, point, size, half_x, half_y):
         self.children = {'NE': None,
                          'SE': None,
                          'SW': None,
-                         'NW': None }
+                         'NW': None}
         self.point = point
         self.half_x = half_x
         self.half_y = half_y
         self.size = size
         self.removable = False
-        
 
     def insert(self, point):
         if(self.point):
@@ -78,7 +78,7 @@ class Quad:
                 deleted = self.children[pos].delete(point)
                 if(deleted):
                     if (self.children[pos].removable):
-                        self.children[pos] = None 
+                        self.children[pos] = None
                     keys = self.get_used_quads()
                     if(len(keys) == 1 and len(self.children[keys[0]].get_used_quads()) == 0):
                         self.point = self.children[keys[0]].point
